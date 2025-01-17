@@ -1,0 +1,16 @@
+.error {
+    color: red;
+    background: rgba(255, 47, 31, 0.3);
+    box-shadow: 2px 2px whitesmoke;
+}
+.error::before {
+    content: '\2757';
+}
+.success {
+    color: green;
+    background: rgba(0, 193, 0, 0.3);
+    box-shadow: 2px 2px whitesmoke;
+}
+.success::before {
+    content: '\2705 ';
+}

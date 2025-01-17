@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="post">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <div class="form-wrapper">
+        <input type="text" name="name" class="form-body" id="name" value="{{store.name}}" placeholder="">
+        <label for="name" class="form-label">Nama Toko</label>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Kategori</label><br>
+        <input type="checkbox" name="categories" id="elektronik" value="elektronik"
+               {% if 'elektronik' in store_categories %} checked {% endif %}>
+        <label for="elektronik" class="form-label">Elektronik</label>
+        <input type="checkbox" name="categories" id="bahan-makanan" value="bahan makanan"
+               {%if 'bahan makanan' in store_categories %} checked {%endif%}>
+        <label for="bahan-makanan" class="form-label">Bahan Makanan</label>
+        <input type="checkbox" name="categories" id="salon" value="salon"
+               {%if 'salon' in store_categories %} checked {%endif%}>
+        <label for="salon" class="form-label">Salon</label>
+        <input type="checkbox" name="categories" id="barbershop" value="barbershop"
+               {%if 'barbershop' in store_categories %} checked {%endif%}>
+        <label for="barbershop" class="form-label">Barbershop</label>
+    </div>
+    <div class="form-wrapper">
+        <label for="phone" class="form-label">Nomor HP</label>
+        <input type="text" name="phone" class="form-body" id="phone" value="{{store.phone}}" placeholder="">
+    </div>
+    <div class="form-wrapper">
+        <textarea name="description" id="description" class="form-body" placeholder="">{{store.description}}</textarea>
+        <label for="description" class="form-label">Deskripsi</label>
+    </div>
+    <div class="form-wrapper">
+        <input type="text" name="open_at" class="form-body" id="open_at" value="{{store.open_at}}" placeholder="" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Format salah. Harus dalam format HH:MM (misal: 23:59)">
+        <label for="open_at" class="form-label">Buka</label>
+    </div>
+    <div class="form-wrapper">
+        <input type="text" name="close_at" class="form-body" id="close_at" value="{{store.close_at}}" placeholder="" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$" title="Format salah. Harus dalam format HH:MM (misal: 23:59)">
+        <label for="close_at" class="form-label">Tutup</label>
+    </div>
+    <div class="form-wrapper">
+        <input type="text" name="google_maps" class="form-body" id="google_maps" value="{{store.google_maps}}" placeholder="">
+        <label for="google_maps" class="form-label">Google Map (URL)</label>
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-sm btn-primary">Simpan</button>
+    </div>
+</form>
+{% endblock content %}

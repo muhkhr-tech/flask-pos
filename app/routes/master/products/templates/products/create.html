@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="post">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <div class="mb-3">
+        <label for="name" class="form-label">Nama Produk</label>
+        <input type="text" name="name" class="form-control" id="name" placeholder="HP">
+    </div>
+    <div class="mb-3">
+        <label for="name" class="form-label">Harga</label>
+        <input type="text" name="price" class="form-control" id="price" placeholder="1000000">
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-sm btn-primary">Simpan</button>
+    </div>
+</form>
+{% endblock content %}

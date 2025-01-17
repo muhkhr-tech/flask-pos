@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block campaign %}
+{% include '_campaign.html' %}
+{% endblock campaign %}
+
+{% block static_notif %}
+<div class="alert alert-info p-2 mt-2" role="alert">
+    <small><i class="fa fa-info-circle"></i> Data mungkin tidak akurat 100%. Anda bisa memeriksa kembali di google atau
+        menghubungi nomor HP yang ada.</small>
+</div>
+{% endblock static_notif %}
+
+{% block content %}
+
+{% include '_filter.html' %}
+
+<div class="row">
+    <!--    <div class="col-12">-->
+    {% for row in rows %}
+    <div class="col-md-4">
+        <div class="card card-updated">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <h5 class="card-title">{{row.name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><small>{{row.categories}}</small></h6>
+                        <p class="card-text fs-13">{{ row.description }}</p>
+                        <small>HP : {{ row.phone }}</small><br>
+                        <small href="#" class="card-link">Jam Kerja : <span class="open_time">{{ row.open_at }}</span> -
+                            <span class="close_time">{{ row.close_at }}</span></small><br>
+                        <small class="is_open"></small>
+                    </div>
+                    <!--                    <div class="" style="max-width: 200px">-->
+                    <!--                        <div class="google-map-canvas">-->
+                    <!--                            <div class="google-map">-->
+                    <!--                                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15780.02831340347!2d116.0893029!3d-8.5953166!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdbf78879e3727%3A0x1ecf5ee0941f3fb9!2sNiaga%20Computer!5e0!3m2!1sid!2sid!4v1727357263436!5m2!1sid!2sid" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>-->
+                    <!--                            </div>-->
+                    <!--                            <a class="embed-map-html" href="https://www.bootstrapskins.com/themes" id="authmaps-data">premium-->
+                    <!--                                bootstrap themes</a>-->
+                    <!--                        </div>-->
+                    <!--                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <!--    </div>-->
+</div>
+{% endblock content %}

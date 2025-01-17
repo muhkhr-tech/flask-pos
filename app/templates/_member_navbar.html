@@ -1,0 +1,72 @@
+<nav class="navbar py-0 navbar-expand-sm navbar-light bg-primary">
+    <div class="container">
+        <a class="navbar-brand fs-3 text-light" href="/" style="font-family: 'Spicy Rice'">Point of Sale</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="topNavbarNavDropdown">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                <li class="nav-item">
+                    <div class="dropdown" data-bs-auto-close="inside">
+                        <a class="nav-link text-light fw-bold" href="#" role="button"
+                           id="dropdownnotif"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-bell" id="notif_icon"></i>
+                        </a>
+                        <input type="hidden" id="user_id" value="{{current_user.id}}"/>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="width: 300px; max-height: 500px; overflow-x: hidden; overflow-y: scroll" id="notification"
+                            aria-labelledby="dropdownnotif">
+                            <h5 class="dropdown-item disabled">Notifikasi</h5>
+                            <li class="dropdown-item" style="font-size: 12px">Tidak ada notifikasi</li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <div class="dropdown">
+                        <a class="nav-link text-white fw-bold py-1" style="font-size: 12px" href="#"
+                           role="button"
+                           id="dropdownMenuUser"
+                           data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-gear"></i> Setting
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuUser">
+                            <li><a class="dropdown-item" style="font-size: 13px"
+                                   href="{{ url_for('main.get_account', username=current_user.username) }}">
+                                <i class="fa fa-user"></i> Profil</a></li>
+                            <li>
+                                <hr class="m-0 dropdown-divider">
+                            </li>
+                            <li>
+                                <form action="/auth/logout" method="post">
+                                    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                                    <button type="submit" class="dropdown-item"
+                                            onclick="return confirm('Anda yakin keluar aplikasi ?')"
+                                            style="font-size: 13px"><i class="fa fa-sign-out"></i> Keluar
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<nav class="navbar py-0 navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="text-dark" style="font-size: 14px; text-decoration: none;">Halo, {{current_user.username}}</a>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" style="font-size: 14px" href="/stores"><i class="fa fa-shop"></i> Toko</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" style="font-size: 14px" href="/stores/create"><i
+                            class="fa fa-plus"></i> Tambah Toko</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

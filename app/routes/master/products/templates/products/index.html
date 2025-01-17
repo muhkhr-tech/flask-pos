@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{{ url_for('master_product.create_product') }}">Tambah</a>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nama Produk</th>
+        <th scope="col">Harga</th>
+        <th scope="col">Stok</th>
+        <th scope="col">Status</th>
+        <th>Aksi</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in rows %}
+    <tr>
+        <td>{{rows.index(row) + 1}}</td>
+        <td>{{row.name}}</td>
+        <td>{{row.price}}</td>
+        <td>{{row.stock}}</td>
+        <td>
+            {% if row.is_active %}
+            <span class="badge bg-success">Active</span>
+            {% else %}
+            <span class="badge bg-secondary">Non Active</span>
+            {% endif %}
+        </td>
+        <td>
+            <form action="{{ url_for('master_product.update_status_product', id=row.product_id) }}" method="post" style="display: inline-block">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                <button class="btn btn-sm btn-warning">Change Status</button>
+            </form>
+            <a href="{{ url_for('master_product.update_stock_product', id=row.product_id) }}">Tambah stock</a>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

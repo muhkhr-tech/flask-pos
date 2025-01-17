@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block static_notif %}
+<div class="container alert alert-info p-2 mt-2" role="alert">
+    <small><i class="fa fa-info-circle"></i> Data mungkin tidak akurat 100%. Anda bisa memeriksa kembali di google atau
+        menghubungi nomor HP yang ada.</small>
+</div>
+{% endblock static_notif %}
+
+{% block content %}
+<div class="row">
+    <div class="col-4">
+        <div class="card card-updated">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <h5 class="card-title">{{account.name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><small>{{account.email}}</small></h6>
+                        <p class="card-text">{{ account.username }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="col-8">
+        <div class="card card-updated">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div class="">
+                        <h5 class="card-title">{{account.name}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><small>{{account.email}}</small></h6>
+                        <p class="card-text">{{ account.username }}</p>
+                        <small>HP : {{ account.phone }}</small><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,103 @@
+input:-webkit-autofill {
+    background-color: white !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    color: inherit !important;
+    transition: background-color 0s;
+}
+
+input:-moz-autofill {
+    background-color: white !important;
+    color: inherit !important;
+}
+
+.form-wrapper {
+            position: relative;
+            border: 1px solid #DBD3D3;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .form-wrapper label {
+            position: absolute;
+            top: 10px;
+            background: white;
+            color: grey;
+            padding: 0 5px;
+            margin: 0 10px;
+            font-size: 14px;
+            transition: 0.2s ease all;
+        }
+
+        .form-wrapper:focus-within label, .form-body:not(:placeholder-shown) + label {
+            position: absolute;
+            top: -13px;
+            margin: 0 13px;
+            color: #007bff;
+            font-size: 13px;
+            background: transparent:
+            transition: 0.2s ease all;
+        }
+        .form-body {
+            width: 100%;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: none;
+            outline: none;
+            background-color: white;
+            display: block
+        }
+        .form-body:focus, .form-body:not(:placeholder-shown) {
+            outline: 2px solid #007bff;
+        }
+
+body {
+    font-family: Poppins, Inter;
+}
+
+.fs-13 {
+    font-size: 13px;
+}
+
+thead {
+    font-size: 12px;
+}
+
+tbody {
+    font-size: 14px;
+}
+
+.card-updated {
+    border-radius: 5px;
+    margin-bottom: 15px;
+    box-shadow: 2px 2px 2px 2px whitesmoke;
+    min-height: 0px;
+}
+
+.google-map-canvas {
+    max-width:100%;
+    overflow:hidden;
+    color:red;
+    width:300px;
+    height:300px
+}
+
+.google-map {
+    height:100%;
+    width:100%;
+    max-width:100%;
+}
+
+.form-select-updated {
+    border: 0;
+}
+.form-select-updated:focus {
+    outline: none;
+    box-shadow: none
+}
+.form-control-updated {
+    border: 0;
+}
+.form-control-updated:focus {
+    outline: none;
+    box-shadow: none;
+}

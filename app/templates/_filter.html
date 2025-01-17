@@ -1,0 +1,45 @@
+<div class="container mb-4 p-0">
+    <div class="row">
+        <div style="col-12">
+            <div class="card card-updated">
+                <div class="card-body">
+                    <form class="">
+                        <div class="d-flex mb-2">
+                            <fieldset class="border rounded-3 px-3 py-1 w-100">
+                                <legend class="float-none text-secondary fw-semibold w-auto mb-0 px-3 fs-6">
+                                    <small>Kategori</small>
+                                </legend>
+                                <select class="form-select form-select-sm form-select-updated"
+                                        id="select-category-form">
+                                    <option value="">-Pilih-</option>
+                                    <option value="elektronik">Elektronik</option>
+                                    <option value="bahan makanan">Bahan Makanan</option>
+                                    <option value="salon">Salon</option>
+                                    <option value="barbershop">Barbershop</option>
+                                    <option value="lainnya">Lainnya</option>
+                                </select>
+                            </fieldset>
+
+                            <fieldset class="border rounded-3 px-3 py-1 w-100 ms-2">
+                                <legend class="float-none text-secondary fw-semibold w-auto px-3 mb-0 fs-6">
+                                    <small>Search</small>
+                                </legend>
+                                <div class="d-flex">
+                                    <input class="form-control form-control-sm form-control-updated me-2"
+                                           id="searchInput" type="search" placeholder="ex: Niaga"
+                                           aria-label="Search">
+                                </div>
+                            </fieldset>
+                        </div>
+                        <div class="w-100 d-flex justify-content-end">
+                            <button class="btn btn-sm btn-outline-secondary rounded-3" onclick="filter()"
+                                    type="button">
+                                Terapkan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
