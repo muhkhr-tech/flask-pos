@@ -1,11 +1,16 @@
 from flask import flash
-from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy import func, literal, select, update, text
 from sqlalchemy.orm import joinedload
 
 from app import models
 from app.core.db import get_db_session
 from app.utils import generate_code
+
+
+def get_all_sales():
+    with get_db_session() as db:
+        rows = db.query(models.Sale).options(joinedload(models.Sale.cashier)).all()
+        return rows
 
 
 async def get_sale(status):
@@ -27,30 +32,19 @@ async def get_struct(status):
         return sale
 
 
-async def create_sale(user_id, product_id, price):
-    sale = models.Sale()
-    detail = models.SaleDetail()
-
-    total_amount = price
-
-    sale.code = generate_code(15)
-    sale.user_id = user_id
-    sale.total_amount = total_amount
-    sale.payment_method = "cash"
-    sale.status = "menunggu"
-
+async def create_sale(user_id, product_id):
     with get_db_session() as db:
         try:
-            db.add(sale)
-            db.flush()
 
-            detail.sale_id = sale.sale_id
-            detail.product_id = product_id
-            detail.quantity = 1
-            detail.price = price
-            detail.subtotal = total_amount
-
-            db.add(detail)
+            stmt = text("SELECT insert_sales(:product_id, :user_id, :code)")
+            db.execute(
+                stmt,
+                {
+                    "product_id": product_id,
+                    "user_id": user_id,
+                    "code": generate_code(15),
+                },
+            )
             db.commit()
             flash("Berhasil membuat struk.", "success")
             return True
@@ -59,43 +53,13 @@ async def create_sale(user_id, product_id, price):
             db.rollback()
 
 
-async def update_sale(user_id, sale_id, product_id, price):
+async def update_cart(user_id, sale_id, product_id):
     with get_db_session() as db:
         try:
-            stmt = (
-                insert(models.SaleDetail)
-                .values(
-                    sale_id=sale_id,
-                    product_id=product_id,
-                    quantity=1,
-                    price=price,
-                    subtotal=price,
-                )
-                .on_conflict_do_update(
-                    index_elements=["sale_id", "product_id"],
-                    set_={
-                        "quantity": models.SaleDetail.quantity + 1,
-                        "subtotal": models.SaleDetail.subtotal + price,
-                    },
-                )
+            stmt = text("SELECT update_cart(:sale_id, :product_id, :user_id)")
+            db.execute(
+                stmt, {"sale_id": sale_id, "product_id": product_id, "user_id": user_id}
             )
-
-            db.execute(stmt)
-
-            update_stmt = (
-                update(models.Sale)
-                .where(models.Sale.sale_id == sale_id)
-                .values(
-                    user_id=user_id,
-                    total_amount=(
-                        select(func.sum(models.SaleDetail.subtotal))
-                        .where(models.SaleDetail.sale_id == sale_id)
-                        .scalar_subquery()
-                    ),
-                )
-            )
-
-            db.execute(update_stmt)
             db.commit()
             flash("Berhasil mengubah struk.", "success")
             return True

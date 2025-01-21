@@ -20,11 +20,11 @@ def get_account(username):
 
 
 @main_bp.route("/")
-@login_required
+# @login_required
 # @role_required("cashier")
 async def index():
     get_sale_await, products = await asyncio.gather(
         crud.get_struct("menunggu"), crud.get_all_products(True)
     )
 
-    return render_template("main/index.html", sale=get_sale_await, products=products)
+    return render_template("main/base.html", sale=get_sale_await, products=products)
