@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<!--{% include '_filter.html' %}-->
+
+<div id="flashMessage"></div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="row">
+            <div style="font-size: 12px">Kode</div>
+            <h6 style="font-size: 13px">{{ sale.code }}</h6>
+            <div style="font-size: 12px">Tanggal</div>
+            <h6 style="font-size: 13px">{{ sale.sale_date }}</h6>
+            <div style="font-size: 12px">Metode Pembayaran</div>
+            <h6 style="font-size: 13px">{{ sale.payment_method }}</h6>
+            <div style="font-size: 12px">Status</div>
+            <h6 style="font-size: 13px">{{ sale.status }}</h6>
+            <div style="font-size: 12px">Kasir</div>
+            <h6 style="font-size: 13px">{{ sale.cashier }}</h6>
+            <hr>
+            <table>
+                <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in sale.products %}
+                <tr class="border-bottom border-dotted">
+                    <td>{{sale.products.index(product) + 1}}</td>
+                    <td>
+                        {{ product.product_name }}<br><span style="font-size: 11px">{{ product.product_code }}</span>
+                    </td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.amount }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div>
+
+            </div>
+            {% for category in categories %}
+            <a href="" style="text-decoration: none">
+
+                <div class="">
+                    <small class="card-title">{{category.name}}</small><br>
+                </div>
+
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-3">
+                <a class="product" href="#" data-product-id="{{ product.product_id }}" data-price="{{ product.price }}"
+                   style="text-decoration: none">
+                    <div class="card card-updated">
+                        <div class="card-body">
+                            <div class="">
+                                <div class="">
+                                    <h5 class="card-title">{{product.name}}</h5>
+                                    <h6 class="card-subtitle mb-2 text-muted"><small>{{product.categories}}</small></h6>
+
+                                    <p class="card-text fs-13">Rp{{ product.price }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+{{ super() }}
+<script>
+    $(document).ready(function(){
+
+        function showFlashMessage(status, message) {
+           if ($('#flashMessage').length === 0) {
+                $('body').append('<div id="flashMessage"></div>');
+            }
+
+            const flashMessage = $('#flashMessage');
+            flashMessage.attr('class', `${status} alert p-2 mb-1`);
+            flashMessage.css({
+                'display': 'flex',
+                'fontSize': '12px'
+            });
+            flashMessage.html(`<p class="mb-0">${message}</p>`);
+
+            setTimeout(function () {
+                flashMessage.fadeOut(300);
+            }, 5000);
+        }
+
+        $('.product').click(function(e) {
+            const csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            const productId = $(this).data('product-id');
+            const price = $(this).data('price');
+
+            $.ajax({
+                url: '/api/sales',
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken
+                },
+                data: JSON.stringify({
+                    product_id: productId,
+                    price: price
+                }),
+                contentType: 'application/json',
+                success: function(data) {
+                    console.log(data)
+                    showFlashMessage(data.status, data.message)
+                },
+                error: function(data) {
+                    const response = JSON.parse(data.responseText)
+                    showFlashMessage(response.status, response.message)
+                }
+            });
+        });
+    });
+</script>
+{% endblock script %}

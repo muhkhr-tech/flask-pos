@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form action="" method="post">
+    <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" id="username" placeholder="admin1"
+               value="{{request.form['username']}}">
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" id="password">
+    </div>
+    <div class="mb-3">
+        <label for="confirmed-password" class="form-label">Konfirmasi Password</label>
+        <input type="password" name="confirmed_password" class="form-control" id="confirmed-password">
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-sm btn-primary">Simpan</button>
+    </div>
+</form>
+{% endblock content %}

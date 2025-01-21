@@ -1,57 +1,9 @@
 {% extends 'base.html' %}
 
-{% block static_notif %}
-<!--<div class="alert alert-info p-2 mt-2" role="alert">-->
-<!--    <small><i class="fa fa-info-circle"></i> Data mungkin tidak akurat 100%. Anda bisa memeriksa kembali di google atau-->
-<!--        menghubungi nomor HP yang ada.</small>-->
-<!--</div>-->
-{% endblock static_notif %}
-
-
-{% block campaign %}
-<!--{% include '_campaign.html' %}-->
-{% endblock campaign %}
-
 {% block content %}
-
-<!--{% include '_filter.html' %}-->
-
-<div class="row">
-    <div class="col-md-2">
-        <div class="row">
-            {% for category in categories %}
-            <a href="" style="text-decoration: none">
-
-                <div class="">
-                    <small class="card-title">{{category.name}}</small><br>
-                </div>
-
-            </a>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="col-md-10">
-        <div class="row">
-            {% for product in products %}
-            <div class="col-md-3">
-                <a href="" style="text-decoration: none">
-                    <div class="card card-updated">
-                        <div class="card-body">
-                            <div class="">
-                                <div class="">
-                                    <h5 class="card-title">{{product.name}}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted"><small>{{product.categories}}</small></h6>
-
-                                    <p class="card-text fs-13">Rp{{ product.price }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</div>
-
+{% if current_user.role == 'cashier' %}
+{% include 'main/cashier.html' %}
+{% else %}
+{% include 'main/admin.html' %}
+{% endif %}
 {% endblock content %}

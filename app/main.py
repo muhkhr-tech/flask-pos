@@ -9,6 +9,7 @@ def create_app(config_name):
         master_product_bp,
         master_user_bp,
         auth_bp,
+        sale_bp,
     )
     from .api import api_bp
 
@@ -25,6 +26,7 @@ def create_app(config_name):
     app.register_blueprint(main_bp)
     app.register_blueprint(master_category_bp, url_prefix="/master/categories")
     app.register_blueprint(master_product_bp, url_prefix="/master/products")
+    app.register_blueprint(sale_bp, url_prefix="/sales")
     app.register_blueprint(master_user_bp, url_prefix="/master/users")
     app.register_blueprint(api_bp, url_prefix="/api")
 

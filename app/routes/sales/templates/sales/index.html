@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<table class="table table-sm">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Kode Struk</th>
+        <th scope="col">Tanggal Struk</th>
+        <th scope="col">Metode Pembayaran</th>
+        <th scope="col">Total</th>
+        <th scope="col">Kasir</th>
+        <th scope="col">Status</th>
+        <th>Aksi</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in rows %}
+    <tr>
+        <td>{{rows.index(row) + 1}}</td>
+        <td>{{row.code}}</td>
+        <td>{{row.sale_date}}</td>
+        <td>{{row.payment_method}}</td>
+        <td>{{row.total_amount}}</td>
+        <td>{{row.cashier.username}}</td>
+        <td>{{row.status}}</td>
+        <td>
+
+
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content %}

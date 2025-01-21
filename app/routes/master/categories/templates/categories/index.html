@@ -6,6 +6,7 @@
     <thead>
     <tr>
         <th scope="col">#</th>
+        <th scope="col">Kode</th>
         <th scope="col">Nama Kategori</th>
         <th scope="col">Status</th>
         <th>Aksi</th>
@@ -15,6 +16,7 @@
     {% for row in rows %}
     <tr>
         <td>{{rows.index(row) + 1}}</td>
+        <td>{{row.code}}</td>
         <td>{{row.name}}</td>
         <td>
             {% if row.is_active %}
@@ -24,7 +26,8 @@
             {% endif %}
         </td>
         <td>
-            <form action="{{ url_for('master_category.update_status_category', id=row.category_id) }}" method="post" style="display: inline-block">
+            <form action="{{ url_for('master_category.update_status_category', id=row.category_id) }}" method="post"
+                  style="display: inline-block">
                 <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
                 <button class="btn btn-sm btn-warning">Change Status</button>
             </form>

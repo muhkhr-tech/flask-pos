@@ -1,2 +1,2 @@
 from .users import *
-from .store import *
+from .sale import *

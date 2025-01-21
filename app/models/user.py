@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, DATETIME
 from flask_login import UserMixin
+from sqlalchemy.orm import relationship, backref
 
 from ..core.db import Base
 

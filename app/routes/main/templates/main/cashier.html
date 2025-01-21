@@ -1,0 +1,79 @@
+<div class="row justify-content-between">
+    {% if sale %}
+    <div class="col-md-4">
+        <div class="row">
+            <h5>Kode: #{{ sale.code }}</h5>
+            <div style="font-size: 12px">Tanggal</div>
+            <h6 style="font-size: 13px">{{ sale.sale_date }}</h6>
+            <div style="font-size: 12px">Metode Pembayaran</div>
+            <h6 style="font-size: 13px">{{ sale.payment_method }}</h6>
+            <div style="font-size: 12px">Status</div>
+            <h6 style="font-size: 13px">{{ sale.status }}</h6>
+            <div style="font-size: 12px">Kasir</div>
+            <h6 style="font-size: 13px">{{ sale.cashier }}</h6>
+            <h5>Total: {{ sale.total_amount }}</h5>
+            <hr>
+            <table>
+                <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Produk</th>
+                    <th>Harga</th>
+                    <th>Jumlah</th>
+                    <th>Total</th>
+                    <th>Hapus</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in sale.products %}
+                <tr class="border-bottom border-dotted">
+                    <td>{{sale.products.index(product) + 1}}</td>
+                    <td>
+                        {{ product.product_name }}<br><span style="font-size: 11px">{{ product.product_code }}</span>
+                    </td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.quantity }}</td>
+                    <td>{{ product.amount }}</td>
+                    <td>
+                        <form action="/sales/delete" method="post">
+                            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="sale_id" value="{{ sale.sale_id }}">
+                            <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                            <button type="submit" class="btn btn-sm btn-danger">-</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    <div {% if sale %} class="col-md-7" {% endif %}>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-md-4">
+                <div class="card card-updated">
+                    <div class="card-body">
+                        <div class="">
+                            <div class="">
+                                <h6 class="card-title">{{product.name}}</h6>
+                                <h6 class="card-subtitle mb-2 text-muted"><small>{{product.categories}}</small></h6>
+
+                                <p class="card-text fs-13">Rp{{ product.price }}</p>
+                            </div>
+                            <form action="/sales/create" class="position-absolute" method="post"
+                                  style="top: -10px; right: -10px">
+                                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                                <input type="hidden" name="product_id" value="{{ product.product_id }}">
+                                <input type="hidden" name="price" value="{{ product.price }}">
+                                <button type="submit" class="btn btn-sm btn-primary">+</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

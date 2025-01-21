@@ -5,6 +5,8 @@ from app import models
 
 api_bp = Blueprint("api", __name__)
 
+from .sales import *
+
 
 @api_bp.route("/notifications/<int:user_id>/")
 def get_notifications(user_id):

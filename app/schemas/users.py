@@ -12,5 +12,11 @@ class UserRegister(UserBase):
     password_confirm: str
 
 
+class CashierCreate(UserBase):
+    password: str
+    confirmed_password: str
+    role: str = "cashier"
+
+
 class UserLogin(UserBase):
     password: str

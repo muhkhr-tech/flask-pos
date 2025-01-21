@@ -8,17 +8,14 @@ from app.core.db import get_db_session
 from app.utils.token import create_token
 
 
-def create_member(data: schemas.UserRegister):
-    logger = logging.getLogger("flask")
+def create_cashier(data: schemas.CashierCreate):
 
     user = models.User()
-    user.name = data.name
     user.username = data.username
-    user.email = data.email
     user.password = generate_password(data.password)
-    user.role = "admin"
+    user.role = data.role
 
-    if not is_valid_password(data.password, data.password_confirm):
+    if not is_valid_password(data.password, data.confirmed_password):
         return False
 
     with get_db_session() as db:
@@ -26,10 +23,10 @@ def create_member(data: schemas.UserRegister):
         try:
             db.commit()
             db.refresh(user)
+            flash("Berhasil membuat akun cashier.", "success")
             return user
         except Exception as e:
-            logger.error(e)
-            flash("Gagal membuat akun.", "error")
+            flash("Gagal membuat akun cashier..", "error")
 
 
 def auth(data: schemas.UserLogin):

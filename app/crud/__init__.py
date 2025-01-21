@@ -1,4 +1,4 @@
 from .users import *
-from .stores import *
+from .sales import *
 from .categories import *
 from .products import *
