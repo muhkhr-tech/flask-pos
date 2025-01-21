@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if current_user.role == 'admin' %}
+{% include 'main/admin.html' %}
+{% elif current_user.role == 'cashier' %}
+{% include 'main/cashier.html' %}
+{% else %}
+{% include 'main/index.html' %}
+{% endif %}
+{% endblock content %}
