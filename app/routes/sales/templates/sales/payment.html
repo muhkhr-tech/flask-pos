@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="row mb-5 justify-content-between">
+            <div class="col">
+                <div class="fs-13">Kode</div>
+                <p>{{sale.code}}</p>
+                <div class="fs-13">Status</div>
+                <p>{{ sale.status }}</p>
+            </div>
+            <div class="col">
+                <div class="fs-13">Tanggal</div>
+                <p>{{sale.sale_date}}</p>
+                <div class="fs-13">Kasir</div>
+                <p>{{sale.cashier}}</p>
+            </div>
+        </div>
+        <div class="row">
+            <table class="mb-5">
+                <tbody>
+                {% for product in sale.products %}
+                <tr class="border-bottom border-dotted">
+                    <td class="py-2">
+                        <span style="font-size: 11px">{{ product.product_code }}</span> - {{ product.product_name }}
+                    </td>
+                    <td>{{ product.quantity }} X {{ product.price }}</td>
+                    <td>{{ product.amount }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="2" class="fw-bold">TOTAL</td>
+                    <td class="fw-bold">{{ sale.total_amount }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <form action="" method="post">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                <div class="mb-3">
+                    <label for="payment_method" class="form-label">Metode Pembayaran</label>
+                    <select class="form-select" name="payment_method" id="payment_method" required>
+                        <option value="">-Pilih-</option>
+                        <option value="cash">Cash</option>
+                        <option value="e-wallet">E-wallet</option>
+                        <option value="transfer-bank">Transper Bank</option>
+                        <option value="qris">QRIS</option>
+                    </select>
+                </div>
+
+                <div class="mb-3" id="input_amount_paid">
+                    <label for="amount_paid" class="form-label">Total Bayar</label>
+                    <input type="number" min="0" name="amount_paid" id="amount_paid" class="form-control"
+                           value="{{request.form['amount_paid']}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-primary">Simpan struk</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

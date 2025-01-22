@@ -2,18 +2,18 @@
     {% if sale %}
     <div class="col-md-4">
         <div class="row">
-            <h5>Kode: #{{ sale.code }}</h5>
-            <div style="font-size: 12px">Tanggal</div>
-            <h6 style="font-size: 13px">{{ sale.sale_date }}</h6>
-            <div style="font-size: 12px">Metode Pembayaran</div>
-            <h6 style="font-size: 13px">{{ sale.payment_method }}</h6>
-            <div style="font-size: 12px">Status</div>
-            <h6 style="font-size: 13px">{{ sale.status }}</h6>
-            <div style="font-size: 12px">Kasir</div>
-            <h6 style="font-size: 13px">{{ sale.cashier }}</h6>
-            <h5>Total: {{ sale.total_amount }}</h5>
-            <hr>
-            <table>
+            <h5 class="p-0">Struk: #{{ sale.code }}</h5>
+            <!--            <div style="font-size: 12px">Tanggal</div>-->
+            <!--            <h6 style="font-size: 13px">{{ sale.sale_date }}</h6>-->
+            <!--            <div style="font-size: 12px">Metode Pembayaran</div>-->
+            <!--            <h6 style="font-size: 13px">{{ sale.payment_method }}</h6>-->
+            <!--            <div style="font-size: 12px">Status</div>-->
+            <!--            <h6 style="font-size: 13px">{{ sale.status }}</h6>-->
+            <!--            <div style="font-size: 12px">Kasir</div>-->
+            <!--            <h6 style="font-size: 13px">{{ sale.cashier }}</h6>-->
+            <!--            <h5>Total: {{ sale.total_amount }}</h5>-->
+            <!--            <hr>-->
+            <table class="my-3">
                 <thead>
                 <tr>
                     <th>No.</th>
@@ -46,6 +46,8 @@
                 {% endfor %}
                 </tbody>
             </table>
+            <a href="{{ url_for('sales.payment', sale_id=sale.sale_id) }}" class="btn btn-sm btn-success w-100">Lanjutkan
+                <i class="fa fa-arrow-right"></i></a>
         </div>
     </div>
     {% endif %}
@@ -58,17 +60,21 @@
                         <div class="">
                             <div class="">
                                 <h6 class="card-title">{{product.name}}</h6>
-                                <h6 class="card-subtitle mb-2 text-muted"><small>{{product.categories}}</small></h6>
-
-                                <p class="card-text fs-13">Rp{{ product.price }}</p>
+                                <!--                                <h6 class="card-subtitle mb-2 text-muted"><small>{{product.categories}}</small></h6>-->
+                                <p class="card-text fs-13">Stok: {{product.stock}} | Rp{{ product.price }}</p>
                             </div>
                             <form action="/sales/create" class="position-absolute" method="post"
                                   style="top: -10px; right: -10px">
                                 <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
                                 <input type="hidden" name="product_id" value="{{ product.product_id }}">
                                 <input type="hidden" name="price" value="{{ product.price }}">
+                                {% if product.stock > 0 %}
                                 <button type="submit" class="btn btn-sm btn-primary">+</button>
+                                {% else %}
+                                <div class="bg-light text-danger px-1" style="font-size: 12px">Stok habis</div>
+                                {% endif %}
                             </form>
+
                         </div>
                     </div>
                 </div>
