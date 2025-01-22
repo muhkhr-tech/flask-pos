@@ -40,9 +40,11 @@ CREATE TABLE sales (
     code VARCHAR(15) NOT NULL UNIQUE,
     user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
     total_amount BIGINT NOT NULL,
-    payment_method TEXT CHECK (payment_method IN ('cash', 'credit_card', 'e-wallet')) NOT NULL,
+    amount_paid BIGINT NOT NULL DEFAULT 0,
+    amount_change BIGINT NOT NULL DEFAULT 0,
+    payment_method TEXT CHECK (payment_method IN ('cash', 'transfer-bank', 'e-wallet', 'qris')),
     sale_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status TEXT CHECK (status IN ('menunggu', 'proses', 'sukses', 'gagal', 'batal')),
+    status TEXT CHECK (status IN ('proses', 'sukses', 'gagal', 'batal')) NOT NULL,
     canceled_by INT REFERENCES users(user_id) ON DELETE SET NULL
 );
 
@@ -67,7 +69,7 @@ CREATE TABLE inventory_logs (
     note TEXT
 );
 
---table view untuk ambil struct dengan status 'menunggu'
+--table view untuk ambil struct dengan status 'proses'
 CREATE OR REPLACE VIEW public.v_get_struct
 AS SELECT s.sale_id,
     s.code,
@@ -85,11 +87,87 @@ AS SELECT s.sale_id,
   GROUP BY s.sale_id, u.username;
 
 --fungsi untuk kurang/hapus sales
-CREATE OR REPLACE FUNCTION update_sale_details_and_sales(
-    p_sale_id INT,
-    p_product_id INT,
-    p_user_id INT
-) RETURNS VOID AS $$
+CREATE OR REPLACE FUNCTION public.update_sale_details_and_sales(p_sale_id integer, p_product_id integer, p_user_id integer)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+begin
+    -- Kurangi quantity jika lebih dari 1
+    UPDATE sale_details
+    SET quantity = quantity - 1,
+        subtotal = subtotal - price
+    WHERE sale_id = p_sale_id
+      AND product_id = p_product_id
+      AND quantity > 0;
+
+    -- Hapus baris jika quantity menjadi 0
+    DELETE FROM sale_details
+    WHERE sale_id = p_sale_id
+      AND product_id = p_product_id
+      AND quantity = 0;
+
+    -- Perbarui total_amount di tabel sales
+    UPDATE sales
+    SET total_amount = (
+        SELECT COALESCE(SUM(subtotal), 0)
+        FROM sale_details
+        WHERE sale_id = p_sale_id
+    ),
+    user_id = p_user_id
+    WHERE sale_id = p_sale_id;
+
+   DELETE FROM sales
+    WHERE sale_id = p_sale_id
+      AND total_amount = 0;
+
+    update products
+	set stock=stock+1
+    WHERE product_id = p_product_id;
+END;
+$function$
+;
+
+--fungsi untuk buat sale
+CREATE OR REPLACE FUNCTION public.insert_sales(p_product_id integer, p_user_id integer, p_code character varying)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+declare
+new_sale_id INT;
+    product_price bigint;
+begin
+	SELECT price INTO product_price
+    FROM products
+    WHERE product_id = p_product_id and stock > 0;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Stok kurang';
+    END IF;
+
+    INSERT INTO sales (code, total_amount, status, user_id)
+    values (
+    	p_code,
+        product_price,
+--        'cash',
+        'proses',
+        p_user_id)
+    returning sale_id into new_sale_id;
+
+   insert into sale_details (quantity, subtotal, product_id, sale_id, price)
+   values(1, product_price, p_product_id, new_sale_id, product_price);
+
+  	update products
+	set stock=stock-1
+    WHERE product_id = p_product_id;
+END;
+$function$
+;
+
+--fungsi untuk update/tambah produk ke struk
+CREATE OR REPLACE FUNCTION public.update_sale_details_and_sales(p_sale_id integer, p_product_id integer, p_user_id integer)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
 BEGIN
     -- Kurangi quantity jika lebih dari 1
     UPDATE sale_details
@@ -119,5 +197,39 @@ BEGIN
     WHERE sale_id = p_sale_id
       AND total_amount = 0;
 END;
-$$ LANGUAGE plpgsql;
+$function$
+;
+
+--fungsi untuk tambah produk ke cart
+CREATE OR REPLACE FUNCTION public.update_cart(p_sale_id integer, p_product_id integer, p_user_id integer)
+ RETURNS void
+ LANGUAGE plpgsql
+AS $function$
+declare
+    product_price bigint;
+   	new_subtotal bigint;
+begin
+	SELECT price into product_price
+    FROM products
+    WHERE product_id = p_product_id and stock > 0;
+
+    IF NOT FOUND THEN
+        RAISE EXCEPTION 'Stok kurang';
+    END IF;
+
+   insert into sale_details (quantity, subtotal, product_id, sale_id, price)
+   values(1, product_price, p_product_id, p_sale_id, product_price)
+   on conflict (sale_id, product_id) do update
+   set quantity=sale_details.quantity+1, subtotal=sale_details.subtotal+product_price
+   returning subtotal into new_subtotal;
+
+  	update sales
+  	set user_id=p_user_id, total_amount=(select sum(subtotal) from sale_details where sale_id = p_sale_id)
+  	where sale_id=p_sale_id;
+
+  	update products
+	set stock=stock-1
+    WHERE product_id = p_product_id;
+END;
+$function$
 ;
