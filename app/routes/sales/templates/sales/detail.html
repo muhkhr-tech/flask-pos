@@ -8,7 +8,7 @@
                 <div class="fs-13">Kode</div>
                 <p>{{sale.code}}</p>
                 <div class="fs-13">Status</div>
-                <p>{{ sale.status }}</p>
+                <p>{{ get_status(sale.status) | safe }}</p>
             </div>
             <div class="col">
                 <div class="fs-13">Tanggal</div>

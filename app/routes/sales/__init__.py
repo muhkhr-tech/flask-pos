@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import current_user, login_required
 
 from app import crud
-from app.utils import role_required
+from app.utils import role_required, get_status
 
 sale_bp = Blueprint("sales", __name__, template_folder="templates")
 
@@ -12,7 +12,7 @@ sale_bp = Blueprint("sales", __name__, template_folder="templates")
 @role_required("cashier")
 def index():
     rows = crud.get_all_sales()
-    return render_template("sales/index.html", rows=rows)
+    return render_template("sales/index.html", rows=rows, get_status=get_status)
 
 
 @sale_bp.route("/create", methods=["POST"])
@@ -59,11 +59,11 @@ def payment(sale_id):
         ):
             return redirect(url_for("sales.index"))
 
-    return render_template("sales/payment.html", sale=sale)
+    return render_template("sales/payment.html", sale=sale, get_status=get_status)
 
 
 @sale_bp.route("/<sale_id>/detail")
 @login_required
 def detail(sale_id):
     sale = crud.get_sale_by_id(sale_id)
-    return render_template("sales/detail.html", sale=sale)
+    return render_template("sales/detail.html", sale=sale, get_status=get_status)
