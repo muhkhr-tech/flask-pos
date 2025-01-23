@@ -60,3 +60,10 @@ def payment(sale_id):
             return redirect(url_for("sales.index"))
 
     return render_template("sales/payment.html", sale=sale)
+
+
+@sale_bp.route("/<sale_id>/detail")
+@login_required
+def detail(sale_id):
+    sale = crud.get_sale_by_id(sale_id)
+    return render_template("sales/detail.html", sale=sale)
