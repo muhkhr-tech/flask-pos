@@ -20,10 +20,10 @@ async def create_sale():
     user_id = current_user.user_id
     product_id = request.form["product_id"]
 
-    get_sale_await = await crud.get_sale("menunggu")
+    get_struct = await crud.get_sale("proses")
 
-    if get_sale_await:
-        await crud.update_cart(user_id, get_sale_await.sale_id, product_id)
+    if get_struct:
+        await crud.update_cart(user_id, get_struct.sale_id, product_id)
     else:
         await crud.create_sale(user_id, product_id)
     return redirect(url_for("main.index"))
@@ -38,3 +38,32 @@ async def delete_sale():
     await crud.delete_sale(user_id, sale_id, product_id)
 
     return redirect(url_for("main.index"))
+
+
+@sale_bp.route("/<sale_id>/payment", methods=["GET", "POST"])
+@login_required
+@role_required("cashier")
+def payment(sale_id):
+    user_id = current_user.user_id
+    sale = crud.get_sale_by_id(sale_id)
+
+    if sale.status != "proses":
+        return redirect(url_for("sales.index"))
+
+    if request.method == "POST":
+        if crud.payment(
+            user_id,
+            sale_id,
+            request.form["payment_method"],
+            request.form["amount_paid"],
+        ):
+            return redirect(url_for("sales.index"))
+
+    return render_template("sales/payment.html", sale=sale)
+
+
+@sale_bp.route("/<sale_id>/detail")
+@login_required
+def detail(sale_id):
+    sale = crud.get_sale_by_id(sale_id)
+    return render_template("sales/detail.html", sale=sale)

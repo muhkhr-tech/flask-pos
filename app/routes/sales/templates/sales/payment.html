@@ -33,16 +33,31 @@
                     <td colspan="2" class="fw-bold">TOTAL</td>
                     <td class="fw-bold">{{ sale.total_amount }}</td>
                 </tr>
-                <tr>
-                    <td colspan="2">Total Bayar ({{ sale.payment_method }})</td>
-                    <td>{{ sale.amount_paid }}</td>
-                </tr>
-                <tr>
-                    <td colspan="2">Kembalian</td>
-                    <td>{{ sale.amount_change }}</td>
-                </tr>
                 </tbody>
             </table>
+            <form action="" method="post">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                <div class="mb-3">
+                    <label for="payment_method" class="form-label">Metode Pembayaran</label>
+                    <select class="form-select" name="payment_method" id="payment_method" required>
+                        <option value="">-Pilih-</option>
+                        <option value="cash">Cash</option>
+                        <option value="e-wallet">E-wallet</option>
+                        <option value="transfer-bank">Transper Bank</option>
+                        <option value="qris">QRIS</option>
+                    </select>
+                </div>
+
+                <div class="mb-3" id="input_amount_paid">
+                    <label for="amount_paid" class="form-label">Total Bayar</label>
+                    <input type="number" min="0" name="amount_paid" id="amount_paid" class="form-control"
+                           value="{{request.form['amount_paid']}}" required>
+                </div>
+
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-primary">Simpan struk</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
