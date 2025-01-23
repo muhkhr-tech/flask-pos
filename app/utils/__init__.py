@@ -55,3 +55,7 @@ def get_status(status):
         color = "text-bg-danger"
 
     return f"<span class='badge rounded-pill {color}'>{status.upper()}</span>"
+
+def get_formatted_date(unformatted_date):
+    formatted_date = unformatted_date.strftime('%a, %d %b %Y %H:%M %Z')
+    return formatted_date

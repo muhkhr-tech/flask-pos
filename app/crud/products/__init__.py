@@ -33,7 +33,7 @@ def create_product(name, price):
             flash(f"Berhasil menambah produk: {product.name}", "success")
             return product
         except Exception as e:
-            flash("Gagal membuat produk.", "error")
+            flash(f"Gagal membuat produk. {e}", "error")
 
 
 def update_stock_product(id, stock):
