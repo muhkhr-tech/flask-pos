@@ -42,3 +42,20 @@ def role_required(role):
 
         return wrapper
     return decorator
+
+def get_status(status):
+    color = ""
+    if status == "proses":
+        color = "text-bg-primary"
+    if status == "sukses":
+        color = "text-bg-success"
+    if status == "gagal":
+        color = "text-bg-secondary"
+    if status == "batal":
+        color = "text-bg-danger"
+
+    return f"<span class='badge rounded-pill {color}'>{status.upper()}</span>"
+
+def get_formatted_date(unformatted_date):
+    formatted_date = unformatted_date.strftime('%a, %d %b %Y %H:%M %Z')
+    return formatted_date

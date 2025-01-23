@@ -1,10 +1,12 @@
-import os
+import os, locale, pytz
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
 class Config:
+
+    locale.setlocale(locale.LC_TIME, "id_ID.UTF-8")
 
     ROOT_DIR = os.path.dirname(__file__)
 

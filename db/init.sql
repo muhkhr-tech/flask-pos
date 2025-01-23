@@ -5,7 +5,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     role TEXT CHECK (role IN ('admin', 'cashier')) NOT NULL,
     is_active BOOLEAN,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- INSERT INTO users
@@ -19,7 +19,7 @@ CREATE TABLE categories (
     name VARCHAR(50) NOT NULL,
     description TEXT,
     is_active BOOLEAN,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CREATE TABLE products
@@ -31,7 +31,7 @@ CREATE TABLE products (
     price NUMERIC(10, 2) NOT NULL,
     stock INT DEFAULT 0,
     is_active BOOLEAN,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CREATE TABLE sales
@@ -43,7 +43,7 @@ CREATE TABLE sales (
     amount_paid BIGINT NOT NULL DEFAULT 0,
     amount_change BIGINT NOT NULL DEFAULT 0,
     payment_method TEXT CHECK (payment_method IN ('cash', 'transfer-bank', 'e-wallet', 'qris')),
-    sale_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    sale_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     status TEXT CHECK (status IN ('proses', 'sukses', 'gagal', 'batal')) NOT NULL,
     canceled_by INT REFERENCES users(user_id) ON DELETE SET NULL
 );
@@ -76,7 +76,7 @@ AS SELECT s.sale_id,
     s.user_id,
     s.total_amount,
     s.payment_method,
-    s.sale_date,
+    to_char(s.sale_date, 'FMDay, DD FMMonth YYYY HH24:MI TZ'::text) AS sale_date,
     s.status,
     u.username AS cashier,
     jsonb_agg(jsonb_build_object('product_id', p.product_id, 'product_code', p.code, 'product_name', p.name, 'quantity', sd.quantity, 'price', sd.price, 'amount', sd.quantity * sd.price)) AS products

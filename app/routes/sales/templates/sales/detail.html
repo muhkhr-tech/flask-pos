@@ -8,11 +8,11 @@
                 <div class="fs-13">Kode</div>
                 <p>{{sale.code}}</p>
                 <div class="fs-13">Status</div>
-                <p>{{ sale.status }}</p>
+                <p>{{ get_status(sale.status) | safe }}</p>
             </div>
             <div class="col">
                 <div class="fs-13">Tanggal</div>
-                <p>{{sale.sale_date}}</p>
+                <p>{{get_formatted_date(sale.sale_date)}}</p>
                 <div class="fs-13">Kasir</div>
                 <p>{{sale.cashier}}</p>
             </div>
