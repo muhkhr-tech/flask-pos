@@ -12,6 +12,7 @@ from sqlalchemy import (
     DECIMAL,
 )
 from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 
 from ..core.db import Base
 
@@ -26,7 +27,7 @@ class Sale(Base):
     amount_change = Column(DECIMAL, nullable=False, default=0)
     payment_method = Column(String(10))
     status = Column(String(7), nullable=False)
-    sale_date = Column(DATETIME, default=datetime.now())
+    sale_date = Column(TIMESTAMP(timezone=True), nullable=False)
     canceled_by = Column(INTEGER)
     user_id = Column(INTEGER, ForeignKey("users.user_id"))
     cashier = relationship("User", foreign_keys=[user_id])
