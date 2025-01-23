@@ -8,9 +8,14 @@ from app.utils import generate_code
 async def get_all_products(status=None):
     with get_db_session() as db:
         if status:
-            rows = db.query(models.Product).filter_by(is_active=status).all()
+            rows = (
+                db.query(models.Product)
+                .filter_by(is_active=status)
+                .order_by(models.Product.name)
+                .all()
+            )
         else:
-            rows = db.query(models.Product).all()
+            rows = db.query(models.Product).order_by(models.Product.name).all()
         return rows
 
 

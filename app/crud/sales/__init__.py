@@ -1,5 +1,6 @@
+import psycopg2
 from flask import flash
-from sqlalchemy import func, literal, select, update, text
+from sqlalchemy import func, literal, select, update, text, false
 from sqlalchemy.orm import joinedload
 
 from app import models
@@ -13,7 +14,16 @@ def get_all_sales():
         return rows
 
 
-async def get_sale(status):
+def get_sale_by_id(sale_id):
+    with get_db_session() as db:
+        stmt = text("SELECT * FROM v_get_struct WHERE sale_id=:sale_id")
+        result = db.execute(stmt, {"sale_id": sale_id})
+        sale = result.fetchone()
+
+        return sale
+
+
+async def get_sale(status=None):
     with get_db_session() as db:
         sale = (
             db.query(models.Sale)
@@ -24,7 +34,7 @@ async def get_sale(status):
         return sale
 
 
-async def get_struct(status):
+async def get_struct(status=None):
     with get_db_session() as db:
         stmt = text("SELECT * FROM v_get_struct WHERE status=:status")
         result = db.execute(stmt, {"status": status})
@@ -49,7 +59,16 @@ async def create_sale(user_id, product_id):
             flash("Berhasil membuat struk.", "success")
             return True
         except Exception as e:
-            flash(f"Gagal membuat struk. {e}", "error")
+            original_error = e.orig
+            if isinstance(original_error, psycopg2.errors.RaiseException):
+                error_message = original_error.pgerror
+                if "stok kurang" in error_message.lower():
+                    flash("Gagal membuat struk: Stok tidak mencukupi.", "error")
+                else:
+                    flash(f"Gagal membuat struk: {error_message}", "error")
+            else:
+                flash(f"Gagal membuat struk. {e}", "error")
+
             db.rollback()
 
 
@@ -64,7 +83,38 @@ async def update_cart(user_id, sale_id, product_id):
             flash("Berhasil mengubah struk.", "success")
             return True
         except Exception as e:
-            flash(f"Gagal mengubah struk. {e}", "error")
+            original_error = e.orig
+            if isinstance(original_error, psycopg2.errors.RaiseException):
+                error_message = original_error.pgerror
+                if "stok kurang" in error_message.lower():
+                    flash("Gagal membuat struk: Stok tidak mencukupi.", "error")
+                else:
+                    flash(f"Gagal membuat struk: {error_message}", "error")
+            else:
+                flash(f"Gagal membuat struk {e}.", "error")
+
+            db.rollback()
+
+
+def payment(user_id, sale_id, payment_method, amount_paid):
+    with get_db_session() as db:
+        sale = db.query(models.Sale).get(sale_id)
+        print(amount_paid)
+
+        if int(amount_paid) < sale.total_amount:
+            flash("Total bayar kurang", "error")
+            return False
+        try:
+            sale.payment_method = payment_method
+            sale.amount_paid = amount_paid
+            sale.amount_change = int(amount_paid) - sale.total_amount
+            sale.status = "sukses"
+            sale.user_id = user_id
+            db.commit()
+            flash("Transaksi berhasil diselesaiakan.", "success")
+            return True
+        except Exception as e:
+            flash(f"Transaksi gagal {e}.", "error")
             db.rollback()
 
 
