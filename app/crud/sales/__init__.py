@@ -10,7 +10,9 @@ from app.utils import generate_code
 
 def get_all_sales():
     with get_db_session() as db:
-        rows = db.query(models.Sale).options(joinedload(models.Sale.cashier)).all()
+        stmt = text("SELECT * FROM v_get_struct")
+        result = db.execute(stmt)
+        rows = result.fetchall()
         return rows
 
 
