@@ -10,15 +10,6 @@ from app import models, crud
 main_bp = Blueprint("main", __name__, template_folder="templates")
 
 
-@main_bp.route("/u/<username>")
-@login_required
-def get_account(username):
-    with get_db_session() as db:
-        account = db.query(User).filter_by(username=current_user.username).first()
-
-    return render_template("main/account/index.html", account=account)
-
-
 @main_bp.route("/")
 # @login_required
 # @role_required("cashier")

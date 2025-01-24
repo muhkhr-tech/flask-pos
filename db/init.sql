@@ -79,7 +79,9 @@ AS SELECT s.sale_id,
     to_char(s.sale_date, 'FMDay, DD FMMonth YYYY HH24:MI TZ'::text) AS sale_date,
     s.status,
     u.username AS cashier,
-    jsonb_agg(jsonb_build_object('product_id', p.product_id, 'product_code', p.code, 'product_name', p.name, 'quantity', sd.quantity, 'price', sd.price, 'amount', sd.quantity * sd.price)) AS products
+    jsonb_agg(jsonb_build_object('product_id', p.product_id, 'product_code', p.code, 'product_name', p.name, 'quantity', sd.quantity, 'price', sd.price, 'amount', sd.quantity * sd.price)) AS products,
+    s.amount_paid,
+    s.amount_change
    FROM sales s
      JOIN sale_details sd ON s.sale_id = sd.sale_id
      JOIN products p ON sd.product_id = p.product_id
