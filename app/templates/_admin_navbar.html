@@ -19,11 +19,13 @@
                 <li class="nav-item">
                     <form action="/auth/logout" method="post">
                         <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-                        <button type="submit" class="nav-link text-white" style="font-size: 14px">Keluar</button>
+                        <button type="submit" class="nav-link text-white"
+                                onclick="return confirm('Yakin keluar dari aplikasi ?')" style="font-size: 14px">Keluar
+                        </button>
                     </form>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white fw-bold" style="font-size: 14px">{{current_user.name}}</a>
+                    <a class="nav-link text-white fw-bold" style="font-size: 14px">{{current_user.username}}</a>
                 </li>
             </ul>
         </div>
