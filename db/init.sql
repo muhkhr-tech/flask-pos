@@ -9,8 +9,8 @@ CREATE TABLE users (
 );
 
 -- INSERT INTO users
-INSERT INTO users (user_id, username, password, role, is_active)
-VALUES (1, 'admin', '$2b$12$G5xSJ8mTrYK/RH6LDJg7RujxBPVEIfEokbFrQKfwAP7ZjhT.B0eOG', 'admin', TRUE);
+INSERT INTO users (username, password, role, is_active)
+VALUES ('admin', '$2b$12$G5xSJ8mTrYK/RH6LDJg7RujxBPVEIfEokbFrQKfwAP7ZjhT.B0eOG', 'admin', TRUE);
 
 -- CREATE TABLE categories
 CREATE TABLE categories (
