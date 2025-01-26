@@ -13,6 +13,7 @@ class User(Base, UserMixin):
     # email = Column(String(100), unique=True, nullable=False)
     password = Column(String(300), nullable=False)
     role = Column(String(10))
+    is_active = Column(Boolean, default=True)
     created_at = Column(DATETIME)
 
     def get_id(self):
