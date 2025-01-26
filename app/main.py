@@ -1,4 +1,6 @@
-from flask import Flask
+from flask import Flask, g, request, url_for, redirect
+
+from app.core.db import get_db_session
 
 
 def create_app(config_name):
@@ -10,10 +12,11 @@ def create_app(config_name):
         master_user_bp,
         auth_bp,
         sale_bp,
+        start_bp,
     )
-    from .api import api_bp
 
     from .extensions import bcrypt, csrf, login_manager
+    from app import models
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])
@@ -28,6 +31,17 @@ def create_app(config_name):
     app.register_blueprint(master_product_bp, url_prefix="/master/products")
     app.register_blueprint(sale_bp, url_prefix="/sales")
     app.register_blueprint(master_user_bp, url_prefix="/master/users")
-    app.register_blueprint(api_bp, url_prefix="/api")
+    app.register_blueprint(start_bp, url_prefix="/starts")
+
+    @app.before_request
+    def check_existing_admin():
+        if not hasattr(g, "admin_exists"):
+            with get_db_session() as db:
+                g.admin_exists = (
+                    db.query(models.User).filter_by(role="admin").first() is not None
+                )
+
+        if not g.admin_exists and request.endpoint != "starts.create_admin":
+            return redirect(url_for("starts.create_admin"))
 
     return app

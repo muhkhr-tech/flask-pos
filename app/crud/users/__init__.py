@@ -8,6 +8,27 @@ from app.core.db import get_db_session
 from app.utils.token import create_token
 
 
+def create_admin(username, password, confirmed_password):
+
+    user = models.User()
+    user.username = username
+    user.password = generate_password(password)
+    user.role = "admin"
+
+    if not is_valid_password(password, confirmed_password):
+        return False
+
+    with get_db_session() as db:
+        db.add(user)
+        try:
+            db.commit()
+            db.refresh(user)
+            flash("Berhasil membuat akun admin.", "success")
+            return user
+        except Exception as e:
+            flash("Gagal membuat akun admin..", "error")
+
+
 def create_cashier(data: schemas.CashierCreate):
 
     user = models.User()
