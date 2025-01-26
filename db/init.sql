@@ -8,10 +8,6 @@ CREATE TABLE users (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
--- INSERT INTO users
-INSERT INTO users (username, password, role, is_active)
-VALUES ('admin', '$2b$12$G5xSJ8mTrYK/RH6LDJg7RujxBPVEIfEokbFrQKfwAP7ZjhT.B0eOG', 'admin', TRUE);
-
 -- CREATE TABLE categories
 CREATE TABLE categories (
     category_id SERIAL PRIMARY KEY,
@@ -150,7 +146,6 @@ begin
     values (
     	p_code,
         product_price,
---        'cash',
         'proses',
         p_user_id)
     returning sale_id into new_sale_id;
