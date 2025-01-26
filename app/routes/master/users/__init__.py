@@ -12,7 +12,7 @@ from app.routes.master import master_user_bp
 @login_required
 def index():
     with get_db_session() as db:
-        rows = db.query(User).all()
+        rows = db.query(User).filter_by(role="cashier").all()
 
     return render_template("users/index.html", rows=rows)
 
