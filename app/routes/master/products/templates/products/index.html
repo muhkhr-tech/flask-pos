@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{{ url_for('master_product.create_product') }}">Tambah</a>
+<a href="{{ url_for('master_product.create_product') }}" class="btn btn-sm btn-success mb-3">Tambah Produk</a>
 <table class="table">
     <thead>
     <tr>
@@ -33,9 +33,10 @@
             <form action="{{ url_for('master_product.update_status_product', id=row.product_id) }}" method="post"
                   style="display: inline-block">
                 <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
-                <button class="btn btn-sm btn-warning">Change Status</button>
+                <button class="btn btn-sm btn-warning">Ganti Status</button>
             </form>
-            <a href="{{ url_for('master_product.update_stock_product', id=row.product_id) }}">Tambah stock</a>
+            <a class="btn btn-sm btn-primary"
+               href="{{ url_for('master_product.update_stock_product', id=row.product_id) }}">Tambah stock</a>
         </td>
     </tr>
     {% endfor %}
