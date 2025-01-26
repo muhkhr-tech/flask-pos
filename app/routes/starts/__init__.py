@@ -16,7 +16,7 @@ def create_admin():
             password=request.form["password"],
             confirmed_password=request.form["confirmed_password"],
         ):
-            return redirect(url_for("main.index"))
+            return redirect(url_for("auth.login"))
 
     return render_template("starts/create-admin.html")
 
