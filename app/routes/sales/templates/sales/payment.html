@@ -38,14 +38,34 @@
             <form action="" method="post">
                 <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
                 <div class="mb-3">
-                    <label for="payment_method" class="form-label">Metode Pembayaran</label>
-                    <select class="form-select" name="payment_method" id="payment_method" required>
-                        <option value="">-Pilih-</option>
-                        <option value="cash">Cash</option>
-                        <option value="e-wallet">E-wallet</option>
-                        <option value="transfer-bank">Transper Bank</option>
-                        <option value="qris">QRIS</option>
-                    </select>
+                    <label class="form-label">Metode Pembayaran</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" id="cash" value="cash">
+                        <label class="form-check-label" for="cash">
+                            CASH
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" id="e-wallet"
+                               value="e-wallet">
+                        <label class="form-check-label" for="e-wallet">
+                            E-Wallet
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" id="transfer-bank"
+                               value="transfer-bank">
+                        <label class="form-check-label" for="transfer-bank">
+                            Transfer Bank
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="payment_method" id="qris"
+                               value="qris">
+                        <label class="form-check-label" for="qris">
+                            QRIS
+                        </label>
+                    </div>
                 </div>
 
                 <div class="mb-3" id="input_amount_paid">

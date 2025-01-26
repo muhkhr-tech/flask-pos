@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import current_user, login_required
 
 from app import crud
@@ -56,13 +56,16 @@ def payment(sale_id):
         return redirect(url_for("sales.index"))
 
     if request.method == "POST":
-        if crud.payment(
-            user_id,
-            sale_id,
-            request.form["payment_method"],
-            request.form["amount_paid"],
-        ):
-            return redirect(url_for("sales.index"))
+        if "payment_method" in request.form:
+            if crud.payment(
+                user_id,
+                sale_id,
+                request.form["payment_method"],
+                request.form["amount_paid"],
+            ):
+                return redirect(url_for("sales.index"))
+        else:
+            flash("Metode pembayaran harus dipilih", "error")
 
     return render_template(
         "sales/payment.html",
