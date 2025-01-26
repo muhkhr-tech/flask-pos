@@ -26,6 +26,9 @@
         <td>{{ get_status(row.status) | safe }}</td>
         <td>
             <a href="{{ url_for('sales.detail', sale_id=row.sale_id) }}" class="btn btn-sm btn-info">Detail</a>
+            {% if row.status == 'proses' %}
+            <a href="{{ url_for('sales.payment', sale_id=row.sale_id) }}" class="btn btn-sm btn-success">Bayar</a>
+            {% endif %}
         </td>
     </tr>
     {% endfor %}
