@@ -31,3 +31,9 @@ def create_cashier():
             return redirect(url_for("master_user.index"))
 
     return render_template("users/create-cashier.html")
+
+
+@master_user_bp.route("/<id>/update-status", methods=["POST"])
+def update_status_user(id):
+    crud.update_status_user(id)
+    return redirect(url_for("master_user.index"))

@@ -65,3 +65,11 @@ def auth(data: schemas.UserLogin):
             return None
 
     return user
+
+
+def update_status_user(id):
+    with get_db_session() as db:
+        user = db.query(models.User).get(id)
+        user.is_active = not user.is_active
+        db.commit()
+        db.refresh(user)

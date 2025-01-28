@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{{ url_for('master_user.create_cashier') }}">Tambah</a>
+<a href="{{ url_for('master_user.create_cashier') }}" class="btn btn-success btn-sm mb-3">Tambah Kasir</a>
 <table class="table">
     <thead>
     <tr>
@@ -9,7 +9,7 @@
         <th scope="col">Username</th>
         <th scope="col">Role</th>
         <th scope="col">Status</th>
-        <th>Aksi</th>
+        <th scope="col">Aksi</th>
     </tr>
     </thead>
     <tbody>
@@ -26,7 +26,11 @@
             {% endif %}
         </td>
         <td>
-
+            <form action="{{ url_for('master_user.update_status_user', id=row.user_id) }}" method="post"
+                  style="display: inline-block">
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                <button class="btn btn-sm btn-warning">Ganti Status</button>
+            </form>
         </td>
     </tr>
     {% endfor %}
