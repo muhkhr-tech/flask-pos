@@ -41,7 +41,13 @@ def create_app(config_name):
                     db.query(models.User).filter_by(role="admin").first() is not None
                 )
 
-        if not g.admin_exists and request.endpoint != "starts.create_admin":
-            return redirect(url_for("starts.create_admin"))
+        if not g.admin_exists:
+            if (
+                request.endpoint != "starts.create_admin"
+                and not request.path.startswith("/static")
+            ):
+                return redirect(url_for("starts.create_admin"))
+
+        print(request.path)
 
     return app
