@@ -58,6 +58,10 @@ def auth(data: schemas.UserLogin):
             flash("Username tidak terdaftar", "error")
             return None
 
+        if not user.is_active:
+            flash("User tidak aktif", "error")
+            return None
+
         is_valid = check_password(user.password, data.password)
 
         if not is_valid:
