@@ -10,6 +10,10 @@ from app.utils.token import create_token
 
 def create_admin(username, password, confirmed_password):
 
+    if not password:
+        flash("Password tidak boleh kosong.", "error")
+        return False
+
     user = models.User()
     user.username = username
     user.password = generate_password(password)
@@ -30,6 +34,10 @@ def create_admin(username, password, confirmed_password):
 
 
 def create_cashier(data: schemas.CashierCreate):
+
+    if not data.password:
+        flash("Password tidak boleh kosong.", "error")
+        return False
 
     user = models.User()
     user.username = data.username
