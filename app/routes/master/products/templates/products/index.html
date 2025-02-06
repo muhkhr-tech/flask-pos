@@ -36,7 +36,8 @@
                 <button class="btn btn-sm btn-warning">Ganti Status</button>
             </form>
             <a class="btn btn-sm btn-primary"
-               href="{{ url_for('master_product.update_stock_product', id=row.product_id) }}">Tambah stock</a>
+               href="{{ url_for('master_product.update_stock_product', id=row.product_id, stock=row.stock) }}">Update
+                stock</a>
         </td>
     </tr>
     {% endfor %}

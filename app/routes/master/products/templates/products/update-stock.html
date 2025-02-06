@@ -1,11 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div><h5>Sisa stok: {{stock_latest}}</h5></div>
 <form action="" method="post">
     <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="change_type" id="increaseStock" value="restock">
+        <label class="form-check-label" for="increaseStock">
+            Tambah Stock
+        </label>
+    </div>
+    <div class="mb-3 form-check">
+        <input class="form-check-input" type="radio" name="change_type" id="decreaseStock" value="adjustment">
+        <label class="form-check-label" for="decreaseStock">
+            Kurangi Stock
+        </label>
+    </div>
     <div class="mb-3">
         <label for="stock" class="form-label">Stock</label>
-        <input type="number" min="0" name="stock" class="form-control" id="stock" value="{{product.stock}}" placeholder="10">
+        <input type="number" min="0" name="stock" class="form-control" id="stock" value="{{request.form['stock']}}"
+               required>
+    </div>
+    <div class="mb-3">
+        <label for="note" class="form-label">Catatan</label>
+        <textarea name="note" id="note" class="form-control">{{request.form['note']}}</textarea>
     </div>
     <div class="mb-3">
         <button class="btn btn-sm btn-primary">Simpan</button>

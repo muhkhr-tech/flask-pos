@@ -1,1 +1,8 @@
-admin
+<div class="row">
+    <div class="col-12 fs-13">
+        {% for log in logs %}
+        <div>{{ log.log_date }} | {{ log.change_type }}: {{ log.quantity }}</div>
+        <hr class="mt-0">
+        {% endfor %}
+    </div>
+</div>

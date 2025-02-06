@@ -14,8 +14,12 @@ main_bp = Blueprint("main", __name__, template_folder="templates")
 # @login_required
 # @role_required("cashier")
 async def index():
-    get_struct, products = await asyncio.gather(
-        crud.get_struct("proses"), crud.get_all_products(True)
+    get_struct, products, logs = await asyncio.gather(
+        crud.get_struct("proses"),
+        crud.get_all_products(True),
+        crud.get_all_inventory_logs(),
     )
 
-    return render_template("main/base.html", sale=get_struct, products=products)
+    return render_template(
+        "main/base.html", sale=get_struct, products=products, logs=logs
+    )
