@@ -1,3 +1,5 @@
+import datetime
+
 from flask import flash
 
 from app import models
@@ -36,17 +38,33 @@ def create_product(name, price):
             flash(f"Gagal membuat produk. {e}", "error")
 
 
-def update_stock_product(id, stock):
+def update_stock_product(id, stock, change_type, note):
     with get_db_session() as db:
         try:
             product = db.query(models.Product).get(id)
-            product.stock = stock
+
+            if change_type == "adjustment":
+                if product.stock < int(stock):
+                    flash("Stok kurang.", "error")
+                    return False
+                else:
+                    product.stock -= int(stock)
+            elif change_type == "restock":
+                product.stock += int(stock)
+
+            inventory_log = models.InventoryLog()
+            inventory_log.product_id = id
+            inventory_log.quantity = stock
+            inventory_log.change_type = change_type
+            inventory_log.log_date = datetime.datetime.now()
+            inventory_log.note = note
+            db.add(inventory_log)
             db.commit()
             db.refresh(product)
             flash(f"Berhasil mengubah stok produk: {product.name}", "success")
             return product
         except Exception as e:
-            flash("Gagal mengubah stok produk.", "error")
+            flash(f"Gagal mengubah stok produk.{e}", "error")
 
 
 def update_status_product(id):
